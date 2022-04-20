@@ -1,0 +1,3 @@
+[submodule "datastreamer"]
+	path = datastreamer
+	url = git@github.com:s-minoo/datastreamer-rust.git
