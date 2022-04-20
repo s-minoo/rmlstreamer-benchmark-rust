@@ -1,0 +1,83 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex: <http://example.com/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rmls: <http://semweb.mmlab.be/ns/rmls#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix activity: <http://example.com/activity/> .
+@prefix hctl: <https://www.w3.org/2019/wot/hypermedia#> .
+@prefix td: <https://www.w3.org/2019/wot/td#> .
+@prefix htv: <http://www.w3.org/2011/http#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix schema: <https://schema.org/>. 
+@base <http://example.com/base/> .
+
+_:kafka_source_ndwSpeed  a td:Thing;
+  td:hasPropertyAffordance [
+    td:hasForm [
+      # URL and content type
+      hctl:hasTarget "ws://data-streamer:9001";
+      hctl:forContentType "application/json";
+      # Read only
+      hctl:hasOperationType "readproperty" ;
+    ];
+  ];
+.
+
+_:kafka_source_ndwFlow a td:Thing; 
+  td:hasPropertyAffordance [
+    td:hasForm [
+      # URL and content type
+      hctl:hasTarget "ws://data-streamer:9000";
+      hctl:forContentType "application/json";
+      # Read only
+      hctl:hasOperationType "readproperty" ;
+    ];
+  ];
+.
+
+
+
+<JoinConfigMap> a rmls:JoinConfigMap;
+        rmls:joinType rmls:DynamicJoin.
+
+
+<NDWSpeedMap>
+  a rr:TriplesMap;
+
+  rml:logicalSource [
+    rml:source _:kafka_source_ndwSpeed;
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$"
+  ];
+
+  rr:subjectMap [
+    rr:template "http://example.com/resource/{internalId}?lat={lat}&long={long}&speed={speed}&accuracy={accuracy}&timestamp={timestamp}&current_timestamp={current_timestamp}" 
+  ];
+
+  rr:predicateObjectMap [
+    rr:predicate <http://example.com/ontology/laneFlow> ;
+    rr:objectMap [
+      rr:parentTriplesMap <NDWFlowMap>;
+      rmls:joinConfig <JoinConfigMap>;
+      rmls:windowType  rmls:DynamicWindow;
+      rr:joinCondition [
+        rr:child "internalId,lat,long,timestamp" ;
+        rr:parent "internalId,lat,long,timestamp" ;
+      ]
+    ]
+  ] .
+
+<NDWFlowMap>
+  a rr:TriplesMap;
+  rml:logicalSource [
+    rml:source _:kafka_source_ndwFlow;
+    rml:referenceFormulation ql:JSONPath;
+    rml:iterator "$"
+  ];
+
+  rr:subjectMap [
+    rr:template "http://example.com/resource/{internalId}?lat={lat}&long={long}&flow={flow}&period={period}&accuracy={accuracy}&timestamp={timestamp}&current_timestamp={current_timestamp}"
+  ].
+  

@@ -1,0 +1,36 @@
+version: '3'
+networks:
+  eval:
+    external: true
+
+volumes:
+  grafanadb:
+  influxdata:
+
+services:
+    influxsrv:
+      build: ./influxdb 
+      container_name: influxsrv
+      ports:
+        - "8086:8086"
+      environment: 
+        INFLUXDB_DB: engines
+      volumes:
+        - influxdata:/var/lib/influxdb:rw
+      networks:
+        - eval
+
+    grafana:
+      build: ./grafana
+      container_name: grafana
+      ports:
+        - "3000:3000"
+      links:
+        - influxsrv:influxsrv
+      volumes:
+        - grafanadb:/var/lib/grafana
+        - ./grafana/provisioning:/etc/grafana/provisioning
+      networks:
+        - eval
+
+

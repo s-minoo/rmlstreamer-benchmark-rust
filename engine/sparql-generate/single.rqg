@@ -1,0 +1,15 @@
+BASE <http://example.com/> 
+PREFIX ex: <http://example.org/>
+PREFIX iter: <http://w3id.org/sparql-generate/iter/>
+PREFIX fun: <http://w3id.org/sparql-generate/fn/>
+    GENERATE {
+        <{?flowId}/flow={?flowVal}?long={?flowLong}?lat={?flowLat}?timestamp={?flowTime}?current_timestamp={?flowCTime}> a ex:NDWFlow . } 
+    ITERATOR iter:WebSocket("ws://data-streamer:9000") AS ?flowRecord
+    WHERE {
+            BIND (fun:JSONPath(?flowRecord, ".flow") AS ?flowVal) 
+            BIND (fun:JSONPath(?flowRecord, ".lat") AS ?flowLat) 
+            BIND (fun:JSONPath(?flowRecord, ".long") AS ?flowLong) 
+            BIND (fun:JSONPath(?flowRecord, ".internalId") AS ?flowId)
+            BIND (fun:JSONPath(?flowRecord, ".current_timestamp") AS ?flowCTime)
+            BIND (fun:JSONPath(?flowRecord, ".timestamp") AS ?flowTime)
+        }

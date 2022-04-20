@@ -1,0 +1,30 @@
+version: '3' 
+services: 
+  sparqlgen:
+    privileged: true
+    build: . 
+    labels: 
+      monitor: t
+    expose:
+      - "9000"
+      - "9001"
+    ports:
+      - "8081:8081"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      #- ./data:/mnt/data
+      - data-in:/mnt/data
+      - data-out:/mnt/tspfs-out
+    networks:
+      - eval
+  
+
+networks:
+  eval:
+    external: true
+
+volumes:
+  data-in:
+  data-out:
+

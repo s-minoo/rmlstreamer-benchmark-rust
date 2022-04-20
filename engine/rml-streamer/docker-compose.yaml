@@ -1,0 +1,71 @@
+version: '3' 
+services: 
+  jobmanager:
+    privileged: true
+    build: . 
+    labels: 
+      monitor: t
+    expose:
+      - "6123"
+      - "9000"
+      - "9001"
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        pipeline.object-reuse: true
+        parallelism.default: 4
+        metrics.latency.granularity: single 
+        jobmanager.rpc.address: jobmanager 
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ./jmlog4j.properties:/opt/flink/conf/log4j.properties
+      #- ./data:/mnt/data
+      - data-in:/mnt/data
+      - data-out:/mnt/tspfs-out
+    networks:
+      - eval
+  
+  taskmanager:
+    privileged: true
+    build: . 
+    expose:
+      - "9000"
+      - "9001"
+      - "6121"
+      - "6122"
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    labels: 
+      monitor: t
+    links:
+      - "jobmanager:jobmanager"
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        taskmanager.numberOfTaskSlots: 4
+        pipeline.object-reuse: true
+        parallelism.default: 4
+        jobmanager.rpc.address: jobmanager 
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ./log4j.properties:/opt/flink/conf/log4j.properties
+      #- ./data:/mnt/data
+      - data-in:/mnt/data
+      - data-out:/mnt/tspfs-out
+    networks:
+      - eval
+
+networks:
+  eval:
+    external: true
+
+volumes:
+  data-in:
+  data-out:
+

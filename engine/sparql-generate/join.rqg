@@ -1,0 +1,38 @@
+BASE <http://example.com/> 
+PREFIX ex: <http://example.org/>
+PREFIX iter: <http://w3id.org/sparql-generate/iter/>
+PREFIX fun: <http://w3id.org/sparql-generate/fn/>
+GENERATE{
+    <{?speedId}/current_timestamp={?speedCTime}> ex:joined 
+    <{?speedId}/current_timestamp={?flowCTime}> .  
+    }
+FROM 
+    GENERATE {
+        <{?flowId}> ex:lat ?flowLat; 
+        ex:long ?flowLong; 
+        ex:flowTime ?flowCTime; 
+        ex:timestamp ?flowTime . }
+    ITERATOR iter:WebSocket("ws://localhost:9000") AS ?flowRecord
+    WHERE {
+            BIND (fun:JSONPath(?flowRecord, ".flow") AS ?flowVal) 
+            BIND (fun:JSONPath(?flowRecord, ".lat") AS ?flowLat) 
+            BIND (fun:JSONPath(?flowRecord, ".long") AS ?flowLong) 
+            BIND (fun:JSONPath(?flowRecord, ".internalId") AS ?flowId)
+            BIND (fun:JSONPath(?flowRecord, ".current_timestamp") AS ?flowCTime)
+            BIND (fun:JSONPath(?flowRecord, ".timestamp") AS ?flowTime)
+        }
+    .
+ITERATOR iter:WebSocket("ws:///localhost:9001") AS ?speedRecord
+WHERE {
+        BIND (fun:JSONPath(?speedRecord, ".speed") AS ?speedVal) 
+        BIND (fun:JSONPath(?speedRecord, ".lat") AS ?speedLat) 
+        BIND (fun:JSONPath(?speedRecord, ".long") AS ?speedLong) 
+        BIND (fun:JSONPath(?speedRecord, ".internalId") AS ?speedId)
+        BIND (fun:JSONPath(?speedRecord, ".current_timestamp") AS ?speedCTime)
+
+        <{?speedId}> 
+        ex:lat ?flowLat; 
+        ex:long ?flowLong; 
+        ex:flowTime ?flowCTime; 
+        ex:timestamp ?speedTime . 
+    }
