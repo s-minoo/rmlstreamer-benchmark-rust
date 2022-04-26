@@ -1,25 +1,9 @@
+# Credits
+This readme is the same as the one [RSPLab](https://github.com/streamreasoning/rsplab/tree/tutorial/collector). 
+
 # Docker Container Monitoring
 
 Monitor real-time and historical memory, cpu, and network usage of your Docker containers.
-
-
-Run cAdvisor with InfluxDB and Grafana
---------------------------------------
-
-Launch the [cAdvisor](https://github.com/google/cadvisor) monitoring
-service with an
-[InfluxDB](https://influxdb.com/docs/v0.9/introduction/overview.html)
-storage backend and [Grafana](http://grafana.org/) web-based dashboard
-with a simple command. Everything runs in
-Docker containers, so you don't need to install anything. Several Grafana
-dashboards are created for you: one showing all containers, and one for
-each.
-
-[docker-compose.yml](docker-compose.yml) is a
-[Docker Compose](https://docs.docker.com/compose/) definition that
-starts the three services in containers and wires them together for you.
-
-Read [docker-compose.README.md](docker-compose.README.md) for details.
 
 
 Connect Grafana to InfluxDB & Share Team Dashboards
@@ -39,7 +23,6 @@ Read [create-dashboards.README.md](create-dashboards.README.md) for details.
 Try It Out!
 -----------
 
-**TODO:** Update screenshots
 
 Try out the "All Containers (Stacked)" dashboard, which shows the CPU, memory,
 and network activity for all of your Docker containers. 
@@ -66,20 +49,31 @@ and create dashboards for any existing Docker containers:
       ```
 4. View your new Grafana dashboard at [http://localhost:3000](http://localhost:3000) with admin/admin
 
-  ![Grafana screenshot](screenshots/grafana-screenshot.png)
 
 5. View your new cAdvisor realtime performance monitoring dashboard at
 
   [http://localhost:9090](http://localhost:9090).
 
-  ![cAdvisor screenshot](screenshots/cadvisor-screenshot.png)
 
 6. Query for specific metrics using your new InfluxDB instance at [http://localhost:8083](http://localhost:8083).
 
-  ![InfluxDB screenshot](screenshots/influxdb-screenshot.png)
 
 7. Re-run the shell script at any point, to create dashboards for all of the currently-running Docker containers
 
     ```
     ./create-dashboards.sh
     ```
+
+
+
+# Collecting metrics to CSV 
+
+A script is provided to collect the results of the evaluation into csv 
+files. **Note: this script should be run first before stopping the evaluation!** 
+
+The following command runs the collection script: 
+
+`./collect.sh [engine_container_name]`
+
+You need to provide the name of the container of the engine to collect
+the metrics. 
