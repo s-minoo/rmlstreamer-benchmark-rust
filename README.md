@@ -10,7 +10,7 @@ All 3 components are setup in a containerized environment using docker.
 The architecture for the docker setup is influenced by [RSPLab](https://github.com/streamreasoning/rsplab) [Riccardo T.]. 
 This repo is available as open-source under the MIT License. 
 
-![Evaluation architecture](./resources/RMLSTreamer_eval_archi.png)
+![Evaluation architecture](./resources/RMLStreamer_eval_archi.png)
 
 
 # Run the evaluation 
