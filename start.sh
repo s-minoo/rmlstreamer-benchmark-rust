@@ -52,7 +52,7 @@ cd ../
 divider 
 
 echo "Starting data streamer" 
-cd data-streamer
+cd datastreamer
 ./start.sh
 cd ../ 
 divider

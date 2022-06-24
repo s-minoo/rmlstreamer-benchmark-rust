@@ -37,7 +37,7 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 ${ENGINE_FOLDER:?Missing engine folder -e}
 
 echo "Stopping data streamer container"  
-cd data-streamer 
+cd datastreamer 
 ./stop.sh
 cd ../
 divider
