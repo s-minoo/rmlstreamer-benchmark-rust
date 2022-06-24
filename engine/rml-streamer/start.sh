@@ -17,9 +17,18 @@ echo  "Waiting for data streamer's connection at: ${HOSTNAME}:${PORT}"
 ./wait-for-it.sh localhost:9001 -t 30 
 divider
 
-echo "Checking out correct branch" 
-cd ./rmlstreamer-source
-#git checkout  feature/window_joins
+echo "Checking into rmlstreamer source repo" 
+if [[ ! -d "RMLStreamer" ]] 
+then 
+   echo "RMLStreamer repo doesn't exists"
+   echo "Downloading the repo at https://github.com/RMLio/RMLStreamer.git"
+
+   git clone https://github.com/RMLio/RMLStreamer.git 
+fi
+
+cd ./RMLStreamer
+echo "Checking out correct branch v2.3.0" 
+git checkout tags/v2.3.0 -b v2.3.0-branch 
 cd ../
 divider
 

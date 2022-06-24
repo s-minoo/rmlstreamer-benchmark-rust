@@ -72,7 +72,7 @@ divider
 if [[ "${COMPLE_FLAG+x}" ]]; then
     
     CURRENT_DIR="$(pwd)" 
-    RML_STREAMER_REPO="./rmlstreamer-source"
+    RML_STREAMER_REPO="./RMLStreamer"
 
     echo "Compiling RMLStreamer from the path ${RML_STREAMER_REPO}" 
     divider
