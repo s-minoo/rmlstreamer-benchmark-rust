@@ -64,6 +64,15 @@ and create dashboards for any existing Docker containers:
     ./create-dashboards.sh
     ```
 
+# Viewing the Grafana dashboards 
+The dashboards are automatically created for the engines once they're started. 
+
+They could be accessed from the grafana homepage by first going to the "Dashboards" tab and clicking on the "Browse" link.
+
+![Grafana homepage](resources/home.png)
+
+The generated dashboards would be shown in a list as shown below: 
+![Grafana dashboards](resources/dashboards.png)
 
 
 # Collecting metrics to CSV 

@@ -22,6 +22,17 @@ The following command runs the specified engine with the given CLI args.
 The CLI args are dependent upon the underlying engines to be evaluated.  
 
 
+## RMLStreamer-SISO 
+
+Consult the [RMLStreamer-SISO repo](https://github.com/RMLio/RMLStreamer) to check the valid CLI args used by the 
+RMLStreamer-SISO. 
+
+Example CLI args: 
+```bash
+./start -e rml-streamer -- -c -m mapping.ttl -o output-folder
+```
+
+
 # Dockerfile
 
 In order to create engine-specific docker container easier, we provide 
