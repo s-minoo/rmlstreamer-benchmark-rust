@@ -105,7 +105,7 @@ JM_CONTAINER=$(docker ps --filter name=jobmanager --format={{.ID}})
 echo $MAPPING_FILE_PATH
 echo "Copying required files into docker containers..." 
 docker cp $MAPPING_FILE_PATH "${JM_CONTAINER}:${BASE_DATA_PATH}"
-docker cp resources/RMLStreamer*SNAPSHOT.jar  "${JM_CONTAINER}":/job.jar
+docker cp resources/RMLStreamer*.jar  "${JM_CONTAINER}":/job.jar
 echo "Done"
 divider
 docker exec -d -t -i "${JM_CONTAINER}" flink run -d -c ${JOB_CLASS_NAME} /job.jar toFile --mapping-file $MAPPING_FILE_CONTAINER_PATH --output-path $OUTPUT_PATH
